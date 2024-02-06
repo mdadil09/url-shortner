@@ -14,7 +14,7 @@ const generateURL = async (req, res) => {
       visitHistory: [],
     });
 
-    return res.json({ id: shortID });
+    return res.status(200).json({ id: shortID });
   } catch (error) {
     console.log(error);
   }
@@ -24,7 +24,7 @@ const getAnalytics = async (req, res) => {
   try {
     const shortId = req.params.shortId;
     const result = await UrlData.findOne({ shortId });
-    return res.json({
+    return res.status(200).json({
       totalClicks: result.visitHistory.length,
       analytics: result.visitHistory,
     });
@@ -33,7 +33,40 @@ const getAnalytics = async (req, res) => {
   }
 };
 
+const updateUrl = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await UrlData.updateOne(
+      { _id: id },
+      {
+        $set: {
+          redirectURL: req.body.url,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteUrl = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await UrlData.deleteOne({
+      _id: id,
+    });
+
+    res.status(200).send("Deleted Successfully!");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   generateURL,
   getAnalytics,
+  updateUrl,
+  deleteUrl,
 };

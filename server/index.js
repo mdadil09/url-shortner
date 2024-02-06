@@ -4,6 +4,7 @@ const connectDB = require("./db/db");
 const bodyParser = require("body-parser");
 const ulrRoutes = require("./routes/urlShort");
 const UrlData = require("./Models/urlModel");
+const authRoutes = require("./routes/user");
 
 const app = express();
 dotenv.config();
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 5701;
 // middlewares
 app.use(bodyParser.json());
 app.use("/api/urlShortner", ulrRoutes);
+app.use("/api/auth", authRoutes);
 
 //dynamic routes
 
