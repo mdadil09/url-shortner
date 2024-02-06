@@ -5,7 +5,10 @@ import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import Dashboard from "./Pages/Dashboard";
-import Analytics from "./components/Analytics";
+import Register from "./Pages/Register";
+import Login from "./Pages/Login";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -14,8 +17,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/signup" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
+      <ToastContainer />
     </>
   );
 }

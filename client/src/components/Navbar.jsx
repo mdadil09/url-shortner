@@ -16,10 +16,12 @@ const Navbar = () => {
           <Link className="ord-links" to="/dashboard">
             Dashboard
           </Link>
-          <Link className="ord-links" to="/analytics">
-            Analytics
+          <Link className="ord-links" to="/login">
+            Login
           </Link>
-          <Link className="nav-btn">Sign Up</Link>
+          <Link to="/signup" className="nav-btn">
+            Sign Up
+          </Link>
         </div>
       </nav>
     </>

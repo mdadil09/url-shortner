@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const nanoid = require("nanoid");
 
-const urlSchema = mongoose.Schema(
+const urlSchema = new mongoose.Schema(
   {
     shortId: {
       type: String,
@@ -13,6 +13,10 @@ const urlSchema = mongoose.Schema(
       required: true,
     },
     visitHistory: [{ timestamp: { type: Number } }],
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
   },
   { timestamps: true }
 );

@@ -5,9 +5,11 @@ const bodyParser = require("body-parser");
 const ulrRoutes = require("./routes/urlShort");
 const UrlData = require("./Models/urlModel");
 const authRoutes = require("./routes/user");
+const cors = require("cors");
 
 const app = express();
 dotenv.config();
+app.use(cors());
 
 //PORT
 const PORT = process.env.PORT || 5701;

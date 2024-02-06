@@ -4,7 +4,6 @@ const UrlData = require("../Models/urlModel");
 const generateURL = async (req, res) => {
   try {
     const body = req.body;
-    console.log(body.url);
     if (!body.url) return res.status(400).json({ error: "url is required" });
     const shortID = nanoid(8);
 
@@ -12,6 +11,7 @@ const generateURL = async (req, res) => {
       shortId: shortID,
       redirectURL: body.url,
       visitHistory: [],
+      createdBy: req.user.id,
     });
 
     return res.status(200).json({ id: shortID });
@@ -28,6 +28,16 @@ const getAnalytics = async (req, res) => {
       totalClicks: result.visitHistory.length,
       analytics: result.visitHistory,
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getUrl = async (req, res) => {
+  try {
+    const result = await UrlData.find({ createdBy: req.user.id });
+
+    res.send(result);
   } catch (error) {
     console.log(error);
   }
@@ -67,6 +77,7 @@ const deleteUrl = async (req, res) => {
 module.exports = {
   generateURL,
   getAnalytics,
+  getUrl,
   updateUrl,
   deleteUrl,
 };
