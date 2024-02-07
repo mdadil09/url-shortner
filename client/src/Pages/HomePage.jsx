@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { UrlState } from "../context/UrlProvider";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { baseurl } from "../constants/constants";
 
 const HomePage = () => {
   const [url, setUrl] = useState();
@@ -45,7 +46,6 @@ const HomePage = () => {
             },
           }
         );
-        // const data = await result.json();
         setUrlData(result.data);
       }
     } catch (error) {
@@ -53,16 +53,22 @@ const HomePage = () => {
     }
   };
 
-  const baseurl = "http://localhost:5700/";
-
-  const copyLinkToClipboard = (link) => {
-    navigator.clipboard.writeText(link);
-    setCopied(true);
-
-    setTimeout(() => {
-      setCopied(false);
-    }, 1000);
+  const copyLinkToClipboard = async (link, index) => {
+    try {
+      await navigator.clipboard.writeText(link);
+      const updatedUrlData = [...urlData];
+      updatedUrlData[index].copied = true;
+      setUrlData(updatedUrlData);
+      setTimeout(() => {
+        updatedUrlData[index].copied = false;
+        setUrlData(updatedUrlData);
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  console.log(urlData);
 
   useEffect(() => {
     fetchURL();
@@ -118,15 +124,18 @@ const HomePage = () => {
                 {urlData.map((link, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
-                    <td>http://localhost:{link.shortId}</td>
+                    <td>
+                      {baseurl}
+                      {link.shortId}
+                    </td>
                     <td>
                       <button
                         className="copy-btn"
                         onClick={() =>
-                          copyLinkToClipboard(baseurl + link.shortId)
+                          copyLinkToClipboard(baseurl + link.shortId, index)
                         }
                       >
-                        {copied ? "Copied" : "Copy"}
+                        {link.copied === true ? "Copied" : "Copy"}
                       </button>
                     </td>
                   </tr>

@@ -1,8 +1,16 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UrlState } from "../context/UrlProvider";
 
 const Navbar = () => {
+  const { user } = UrlState();
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    localStorage.removeItem("userInfo");
+    navigate("/");
+  };
   return (
     <>
       <nav className="navbar">
@@ -16,9 +24,15 @@ const Navbar = () => {
           <Link className="ord-links" to="/dashboard">
             Dashboard
           </Link>
-          <Link className="ord-links" to="/login">
-            Login
-          </Link>
+          {user ? (
+            <button className="nav-btn-logout" onClick={logoutHandler}>
+              Log Out
+            </button>
+          ) : (
+            <Link className="ord-links" to="/login">
+              Login
+            </Link>
+          )}
           <Link to="/signup" className="nav-btn">
             Sign Up
           </Link>

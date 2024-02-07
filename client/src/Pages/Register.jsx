@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Register = () => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -21,7 +22,7 @@ const Register = () => {
         { name, email, password },
         config
       );
-
+      navigate("/");
       localStorage.setItem("userInfo", JSON.stringify(result));
     } catch (error) {
       console.log(error);

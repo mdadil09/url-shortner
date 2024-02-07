@@ -43,6 +43,20 @@ body {
   border-radius: 5px;
 }
 
+.nav-links .nav-btn-logout {
+  font-size: 18px;
+  background-color: #ff0800;
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
 .nav-links .nav-btn:hover {
   background-color: #0056b3;
 }
@@ -252,4 +266,81 @@ body {
 
 .copy-btn:hover {
   background-color: #0056b3;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-box {
+  margin-top: 50px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  height: auto;
+  min-height: 80vh;
+  width: 80vw;
+  background-color: white;
+}
+
+.dashboard-data {
+  margin: 30px;
+}
+
+.edit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.del-btn {
+  background-color: #ff0800;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding-top: 16px; */
+}
+
+.modal-header-text {
+  align-items: stretch;
+  color: var(--light-bulma, #231f20);
+  font-feature-settings: "clig" off, "liga" off;
+  font-family: Figtree;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px; /* 160% */
+}
+
+.modal-header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.modal-header img {
+  color: #ff0800;
 }
