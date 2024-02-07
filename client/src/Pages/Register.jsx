@@ -2,11 +2,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Register = () => {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -22,8 +23,9 @@ const Register = () => {
         { name, email, password },
         config
       );
+      localStorage.setItem("userInfo", JSON.stringify(result.data));
       navigate("/");
-      localStorage.setItem("userInfo", JSON.stringify(result));
+      toast.success("User Signed Up Successfully");
     } catch (error) {
       console.log(error);
     }

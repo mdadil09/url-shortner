@@ -1,34 +1,12 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import axios from "axios";
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
+import { UrlState } from "../context/UrlProvider";
 
 const Login = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const navigate = useNavigate();
-
-  const handleSubmit = async () => {
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-
-      const result = await axios.post(
-        "http://localhost:5700/api/auth/login",
-        { email, password },
-        config
-      );
-
-      localStorage.setItem("userInfo", JSON.stringify(result));
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { email, password, setEmail, setPassword, handleSubmit } = UrlState();
 
   return (
     <div className="auth-container">

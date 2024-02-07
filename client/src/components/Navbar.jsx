@@ -1,15 +1,17 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UrlState } from "../context/UrlProvider";
 
 const Navbar = () => {
-  const { user } = UrlState();
+  const { loggedIn, setLoggedIn } = UrlState();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
     navigate("/");
+    setLoggedIn(false);
   };
   return (
     <>
@@ -24,7 +26,7 @@ const Navbar = () => {
           <Link className="ord-links" to="/dashboard">
             Dashboard
           </Link>
-          {user ? (
+          {loggedIn ? (
             <button className="nav-btn-logout" onClick={logoutHandler}>
               Log Out
             </button>

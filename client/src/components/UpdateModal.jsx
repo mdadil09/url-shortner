@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-modal";
 import close from "../assests/close.svg";
 
 const customStyles = {
   content: {
-    width: "544px",
-    height: "463px",
+    width: "400px",
+    height: "auto",
     top: "50%",
     left: "50%",
     right: "auto",
@@ -21,7 +21,7 @@ const customStyles = {
   },
 };
 
-const UpdateModal = ({ modalIsOpen, setIsOpen, openModal }) => {
+const UpdateModal = ({ modalIsOpen, setIsOpen, updateURL, url, setUrl }) => {
   const closeModal = (event) => {
     event.preventDefault();
     setIsOpen(false);
@@ -41,7 +41,18 @@ const UpdateModal = ({ modalIsOpen, setIsOpen, openModal }) => {
           <img src={close} alt="close" />
         </button>
       </div>
-      <div className="modal-content"></div>
+      <div className="modal-content">
+        <label htmlFor="">Enter New Redirect URL</label>
+        <input
+          type="text"
+          placeholder="Enter New Redirect URL"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+        />
+        <button className="modal-button" onClick={updateURL}>
+          Update
+        </button>
+      </div>
     </Modal>
   );
 };

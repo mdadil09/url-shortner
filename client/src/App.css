@@ -57,6 +57,10 @@ body {
   cursor: pointer;
 }
 
+.nav-links .nav-btn-logout:hover {
+  background-color: #ef0107;
+}
+
 .nav-links .nav-btn:hover {
   background-color: #0056b3;
 }
@@ -134,9 +138,21 @@ body {
 
 .input-btn {
   margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 .input-btn .btn {
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.input-btn a {
+  text-decoration: none;
   color: #fff;
   background-color: #007bff;
   border: none;
@@ -224,10 +240,10 @@ body {
   text-decoration: none;
 }
 
-/* LinkTable.css */
+/* LinkTable */
 
 .view-url {
-  margin: 20px 60px;
+  margin: 30px 60px;
 }
 
 .link-table {
@@ -251,7 +267,7 @@ body {
 }
 
 .link-table .copy-btn {
-  background-color: #007bff;
+  background-color: #03c03c;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -265,7 +281,7 @@ body {
 }
 
 .copy-btn:hover {
-  background-color: #0056b3;
+  background-color: #17b169;
 }
 
 .dashboard {
@@ -302,6 +318,10 @@ body {
   border-radius: 5px;
 }
 
+.edit-btn:hover {
+  background-color: #0056b3;
+}
+
 .del-btn {
   background-color: #ff0800;
   color: white;
@@ -314,6 +334,10 @@ body {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.del-btn:hover {
+  background-color: #ef0107;
 }
 
 .modal-header {
@@ -343,4 +367,43 @@ body {
 
 .modal-header img {
   color: #ff0800;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.modal-content label {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.modal-content input {
+  font-size: 18px;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.modal-content input:focus {
+  outline: 1px solid #007bff;
+}
+
+.modal-content .modal-button {
+  background-color: #007bff;
+  font-size: 18px;
+  padding: 12px;
+  color: #fff;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-content .modal-button:hover {
+  background-color: #0056b3;
+  transition: 0.5 ease-in-out;
 }

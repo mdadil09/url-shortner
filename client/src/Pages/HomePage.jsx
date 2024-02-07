@@ -1,21 +1,22 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { UrlState } from "../context/UrlProvider";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { baseurl } from "../constants/constants";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
-  const [url, setUrl] = useState();
+  const [url, setUrl] = useState("");
   const [urlData, setUrlData] = useState([]);
-  const { user } = UrlState();
-  const navigate = useNavigate();
+  const { user, loggedIn } = UrlState();
 
   const [copied, setCopied] = useState(false);
 
   const handleSubmit = async () => {
     try {
-      const token = user.data.token;
+      const token = user.token;
       const config = {
         headers: {
           "Content-type": "application/json",
@@ -29,6 +30,7 @@ const HomePage = () => {
         config
       );
       fetchURL();
+      toast.success("URL Generated Successfully!");
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +38,7 @@ const HomePage = () => {
 
   const fetchURL = async () => {
     try {
-      const token = user?.data?.token;
+      const token = user?.token;
       if (user) {
         const result = await axios.get(
           "http://localhost:5700/api/urlShortner/",
@@ -68,10 +70,9 @@ const HomePage = () => {
     }
   };
 
-  console.log(urlData);
-
   useEffect(() => {
     fetchURL();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -105,43 +106,51 @@ const HomePage = () => {
                 />
               </div>
               <div className="input-btn">
-                <button className="btn" onClick={handleSubmit}>
-                  {user ? "Get Your URL" : "Sign Up and get your URL"}
-                </button>
+                {loggedIn ? (
+                  <button className="btn" onClick={handleSubmit}>
+                    Get Your URL
+                  </button>
+                ) : (
+                  <Link to="/signup">Sign Up and get your URL</Link>
+                )}
               </div>
             </div>
           </div>
           <div className="view-url">
-            <table className="link-table">
-              <thead>
-                <tr>
-                  <th>Serial No</th>
-                  <th>URL</th>
-                  <th>Copy</th>
-                </tr>
-              </thead>
-              <tbody>
-                {urlData.map((link, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
-                      {baseurl}
-                      {link.shortId}
-                    </td>
-                    <td>
-                      <button
-                        className="copy-btn"
-                        onClick={() =>
-                          copyLinkToClipboard(baseurl + link.shortId, index)
-                        }
-                      >
-                        {link.copied === true ? "Copied" : "Copy"}
-                      </button>
-                    </td>
+            {loggedIn ? (
+              <table className="link-table">
+                <thead>
+                  <tr>
+                    <th>Serial No</th>
+                    <th>URL</th>
+                    <th>Copy</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {urlData.map((link, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>
+                        {baseurl}
+                        {link.shortId}
+                      </td>
+                      <td>
+                        <button
+                          className="copy-btn"
+                          onClick={() =>
+                            copyLinkToClipboard(baseurl + link.shortId, index)
+                          }
+                        >
+                          {link.copied === true ? "Copied" : "Copy"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

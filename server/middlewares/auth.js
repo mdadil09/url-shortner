@@ -10,7 +10,7 @@ const protect = (req, res, next) => {
     token = token.split(" ")[1];
 
     let verifiedUser = jwt.verify(token, process.env.TOKEN_SECRET);
-    if (!verifiedUser) res.status(201).send("Unauthorized Access");
+    if (!verifiedUser) return res.status(201).send("Unauthorized Access");
 
     req.user = verifiedUser;
     next();

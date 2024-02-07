@@ -4,20 +4,24 @@ import { UrlState } from "../context/UrlProvider";
 import axios from "axios";
 import { baseurl } from "../constants/constants";
 import UpdateModal from "../components/updateModal";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [urlData, setUrlData] = useState([]);
-  const { user } = UrlState();
+  const [url, setUrl] = useState("");
+  const [urlId, setUrlId] = useState();
+  const { user, loggedIn } = UrlState();
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
-  const openModal = () => {
+  const openModal = (id) => {
+    setUrlId(id);
     setIsOpen(true);
   };
 
   const fetchURL = async () => {
     try {
-      const token = user?.data?.token;
+      const token = user?.token;
       if (user) {
         const result = await axios.get(
           "http://localhost:5700/api/urlShortner/",
@@ -36,49 +40,135 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchURL();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const updateURL = async () => {
+    try {
+      const token = user?.token;
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const result = await axios.patch(
+        `http://localhost:5700/api/urlShortner/update/${urlId}`,
+        { url },
+        config
+      );
+      setIsOpen(false);
+      toast.success("URL Updated Successfully!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteURL = async (id) => {
+    try {
+      const token = user?.token;
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const result = await axios.delete(
+        `http://localhost:5700/api/urlShortner/delete/${id}`,
+        config
+      );
+
+      setUrlData(urlData.filter((link) => link._id !== id));
+      toast.success("URL deleted Successfully!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const copyLinkToClipboard = async (link, index) => {
+    try {
+      await navigator.clipboard.writeText(link);
+      const updatedUrlData = [...urlData];
+      updatedUrlData[index].copied = true;
+      setUrlData(updatedUrlData);
+      setTimeout(() => {
+        updatedUrlData[index].copied = false;
+        setUrlData(updatedUrlData);
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="dashboard">
       <div className="dashboard-box">
-        <div className="dashboard-data">
-          <h3>My URL</h3>
-          <table className="link-table">
-            <thead>
-              <tr>
-                <th>Serial No</th>
-                <th>URL</th>
-                <th>Clicks</th>
-                <th>Update</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {urlData.map((link, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>
-                    {baseurl}
-                    {link.shortId}
-                  </td>
-                  <td>{link.visitHistory.length}</td>
-                  <td>
-                    <button className="edit-btn" onClick={openModal}>
-                      Update
-                    </button>
-                  </td>
-                  <td>
-                    <button className="del-btn">Delete</button>
-                  </td>
+        {loggedIn ? (
+          <div className="dashboard-data">
+            <h3>My URL</h3>
+            <table className="link-table">
+              <thead>
+                <tr>
+                  <th>Serial No</th>
+                  <th>URL</th>
+                  <th>Clicks</th>
+                  <th>Copy</th>
+                  <th>Update</th>
+                  <th>Delete</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {urlData.map((link, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      {baseurl}
+                      {link.shortId}
+                    </td>
+                    <td>{link.visitHistory.length}</td>
+                    <td>
+                      {" "}
+                      <button
+                        className="copy-btn"
+                        onClick={() =>
+                          copyLinkToClipboard(baseurl + link.shortId, index)
+                        }
+                      >
+                        {link.copied === true ? "Copied" : "Copy"}
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="edit-btn"
+                        onClick={() => openModal(link._id)}
+                      >
+                        Update
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="del-btn"
+                        onClick={() => deleteURL(link._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <></>
+        )}
         <UpdateModal
           modalIsOpen={modalIsOpen}
           setIsOpen={setIsOpen}
-          openModal={openModal}
+          url={url}
+          setUrl={setUrl}
+          updateURL={updateURL}
         />
       </div>
     </div>
