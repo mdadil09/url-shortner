@@ -1,12 +1,41 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { UrlState } from "../context/UrlProvider";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { baseurl } from "../constants/constants";
 
 const Login = () => {
-  const { email, password, setEmail, setPassword, handleSubmit } = UrlState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { setLoggedIn } = UrlState();
+
+  const handleSubmit = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const result = await axios.post(
+        `${baseurl}api/auth/login`,
+        { email, password },
+        config
+      );
+
+      navigate("/");
+      localStorage.setItem("userInfo", JSON.stringify(result.data));
+      toast.success("User Logged In Successfully");
+      setLoggedIn(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="auth-container">

@@ -8,11 +8,9 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
+  const { user, loggedIn } = UrlState();
   const [url, setUrl] = useState("");
   const [urlData, setUrlData] = useState([]);
-  const { user, loggedIn } = UrlState();
-
-  const [copied, setCopied] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -25,7 +23,7 @@ const HomePage = () => {
       };
 
       const result = await axios.post(
-        "http://localhost:5700/api/urlShortner/",
+        `${baseurl}api/urlShortner/`,
         { url },
         config
       );
@@ -39,17 +37,12 @@ const HomePage = () => {
   const fetchURL = async () => {
     try {
       const token = user?.token;
-      if (user) {
-        const result = await axios.get(
-          "http://localhost:5700/api/urlShortner/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUrlData(result.data);
-      }
+      const result = await axios.get(`${baseurl}api/urlShortner/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUrlData(result.data);
     } catch (error) {
       console.log(error);
     }
@@ -71,9 +64,11 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    fetchURL();
+    if (user) {
+      fetchURL();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   return (
     <div className="home-page">
@@ -106,7 +101,7 @@ const HomePage = () => {
                 />
               </div>
               <div className="input-btn">
-                {loggedIn ? (
+                {loggedIn === true ? (
                   <button className="btn" onClick={handleSubmit}>
                     Get Your URL
                   </button>
@@ -117,7 +112,7 @@ const HomePage = () => {
             </div>
           </div>
           <div className="view-url">
-            {loggedIn ? (
+            {user ? (
               <table className="link-table">
                 <thead>
                   <tr>

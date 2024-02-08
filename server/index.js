@@ -6,6 +6,7 @@ const ulrRoutes = require("./routes/urlShort");
 const UrlData = require("./Models/urlModel");
 const authRoutes = require("./routes/user");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 dotenv.config();

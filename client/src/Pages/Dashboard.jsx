@@ -5,12 +5,13 @@ import axios from "axios";
 import { baseurl } from "../constants/constants";
 import UpdateModal from "../components/updateModal";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [urlData, setUrlData] = useState([]);
   const [url, setUrl] = useState("");
   const [urlId, setUrlId] = useState();
-  const { user, loggedIn } = UrlState();
+  const { user } = UrlState();
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -22,15 +23,13 @@ const Dashboard = () => {
   const fetchURL = async () => {
     try {
       const token = user?.token;
+
       if (user) {
-        const result = await axios.get(
-          "http://localhost:5700/api/urlShortner/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const result = await axios.get(`${baseurl}api/urlShortner/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setUrlData(result.data);
       }
     } catch (error) {
@@ -45,7 +44,7 @@ const Dashboard = () => {
 
   const updateURL = async () => {
     try {
-      const token = user?.token;
+      const token = user.token;
       const config = {
         headers: {
           "Content-type": "application/json",
@@ -54,7 +53,7 @@ const Dashboard = () => {
       };
 
       const result = await axios.patch(
-        `http://localhost:5700/api/urlShortner/update/${urlId}`,
+        `${baseurl}api/urlShortner/update/${urlId}`,
         { url },
         config
       );
@@ -67,7 +66,7 @@ const Dashboard = () => {
 
   const deleteURL = async (id) => {
     try {
-      const token = user?.token;
+      const token = user.token;
       const config = {
         headers: {
           "Content-type": "application/json",
@@ -76,7 +75,7 @@ const Dashboard = () => {
       };
 
       const result = await axios.delete(
-        `http://localhost:5700/api/urlShortner/delete/${id}`,
+        `${baseurl}api/urlShortner/delete/${id}`,
         config
       );
 
@@ -105,7 +104,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <div className="dashboard-box">
-        {loggedIn ? (
+        {user ? (
           <div className="dashboard-data">
             <h3>My URL</h3>
             <table className="link-table">
@@ -120,48 +119,56 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {urlData.map((link, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
-                      {baseurl}
-                      {link.shortId}
-                    </td>
-                    <td>{link.visitHistory.length}</td>
-                    <td>
-                      {" "}
-                      <button
-                        className="copy-btn"
-                        onClick={() =>
-                          copyLinkToClipboard(baseurl + link.shortId, index)
-                        }
-                      >
-                        {link.copied === true ? "Copied" : "Copy"}
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="edit-btn"
-                        onClick={() => openModal(link._id)}
-                      >
-                        Update
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="del-btn"
-                        onClick={() => deleteURL(link._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {user ? (
+                  urlData.map((link, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>
+                        {baseurl}
+                        {link.shortId}
+                      </td>
+                      <td>{link.visitHistory.length}</td>
+                      <td>
+                        {" "}
+                        <button
+                          className="copy-btn"
+                          onClick={() =>
+                            copyLinkToClipboard(baseurl + link.shortId, index)
+                          }
+                        >
+                          {link.copied === true ? "Copied" : "Copy"}
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="edit-btn"
+                          onClick={() => openModal(link._id)}
+                        >
+                          Update
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="del-btn"
+                          onClick={() => deleteURL(link._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <></>
+                )}
               </tbody>
             </table>
           </div>
         ) : (
-          <></>
+          <div className="dash-btn">
+            <Link to="/login" className="btn">
+              Sign In
+            </Link>
+          </div>
         )}
         <UpdateModal
           modalIsOpen={modalIsOpen}

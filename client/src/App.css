@@ -68,8 +68,6 @@ body {
 .ord-links:hover {
   color: tomato;
 }
-.home-page {
-}
 
 .hero-section {
   justify-content: center;
@@ -338,6 +336,31 @@ body {
 
 .del-btn:hover {
   background-color: #ef0107;
+}
+
+.dash-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dashboard .dashboard-box .dash-btn .btn {
+  text-decoration: none;
+  background-color: #007bff;
+  font-size: 24px;
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dashboard .dashboard-box .dash-btn .btn:hover {
+  background-color: #0056b3;
 }
 
 .modal-header {

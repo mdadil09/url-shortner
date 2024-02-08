@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UrlState } from "../context/UrlProvider";
 
 const Navbar = () => {
-  const { loggedIn, setLoggedIn } = UrlState();
+  const { user, loggedIn, setLoggedIn } = UrlState();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
@@ -26,7 +26,7 @@ const Navbar = () => {
           <Link className="ord-links" to="/dashboard">
             Dashboard
           </Link>
-          {loggedIn ? (
+          {loggedIn === true ? (
             <button className="nav-btn-logout" onClick={logoutHandler}>
               Log Out
             </button>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { baseurl } from "../constants/constants";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -19,7 +20,7 @@ const Register = () => {
       };
 
       const result = await axios.post(
-        "http://localhost:5700/api/auth/register",
+        `${baseurl}api/auth/register`,
         { name, email, password },
         config
       );
